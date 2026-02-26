@@ -1,0 +1,10 @@
+{
+    "name": "parkk/ai-discovery",
+    "description": "Parkk AI Discovery WordPress Plugin",
+    "require": {
+        "league/html-to-markdown": "^5.1"
+    },
+    "config": {
+        "vendor-dir": "vendor"
+    }
+}
