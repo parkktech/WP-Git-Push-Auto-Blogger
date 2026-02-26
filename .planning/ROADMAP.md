@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   5. `scripts/package.json` installs all pipeline dependencies (@anthropic-ai/sdk, puppeteer, form-data) via `npm install`
 **Plans:** 1 plan
 Plans:
-- [ ] 01-01-PLAN.md — Create brand voice module and pipeline dependencies
+- [x] 01-01-PLAN.md — Create brand voice module and pipeline dependencies
 
 ### Phase 2: Blog Post Generator
 **Goal**: A real commit pushed to main triggers evaluation, generates a full blog post, uploads screenshots, creates a WordPress draft with SEO meta and schema populated, and fires a Telegram notification — proving the core pipeline hypothesis
@@ -76,7 +76,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Brand Voice Foundation | 0/1 | Planned | - |
+| 1. Brand Voice Foundation | 1/1 | Complete | 2026-02-26 |
 | 2. Blog Post Generator | 0/? | Not started | - |
 | 3. Thought Leadership and Automation | 0/? | Not started | - |
 | 4. WordPress AI Discovery Plugin | 0/? | Not started | - |

@@ -9,11 +9,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Brand Voice
 
-- [ ] **BRAND-01**: Brand voice module exports identity, voice guidelines, and service descriptions
-- [ ] **BRAND-02**: Module exports rotating urgency messaging blocks (6 variations)
-- [ ] **BRAND-03**: Module exports FAQ templates matching "hire AI developer" search intent
-- [ ] **BRAND-04**: Module exports randomized CTA blocks
-- [ ] **BRAND-05**: Module enforces framing rule: "we harness AI as a tool" (never "AI writes our code")
+- [x] **BRAND-01**: Brand voice module exports identity, voice guidelines, and service descriptions
+- [x] **BRAND-02**: Module exports rotating urgency messaging blocks (6 variations)
+- [x] **BRAND-03**: Module exports FAQ templates matching "hire AI developer" search intent
+- [x] **BRAND-04**: Module exports randomized CTA blocks
+- [x] **BRAND-05**: Module enforces framing rule: "we harness AI as a tool" (never "AI writes our code")
 
 ### Content Pipeline
 
@@ -107,11 +107,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BRAND-01 | Phase 1 | Pending |
-| BRAND-02 | Phase 1 | Pending |
-| BRAND-03 | Phase 1 | Pending |
-| BRAND-04 | Phase 1 | Pending |
-| BRAND-05 | Phase 1 | Pending |
+| BRAND-01 | Phase 1 | Complete |
+| BRAND-02 | Phase 1 | Complete |
+| BRAND-03 | Phase 1 | Complete |
+| BRAND-04 | Phase 1 | Complete |
+| BRAND-05 | Phase 1 | Complete |
 | PIPE-01 | Phase 2 | Pending |
 | PIPE-02 | Phase 2 | Pending |
 | PIPE-03 | Phase 2 | Pending |
