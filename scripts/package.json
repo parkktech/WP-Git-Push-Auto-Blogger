@@ -1,0 +1,14 @@
+{
+  "name": "parkk-blog-pipeline",
+  "version": "1.0.0",
+  "description": "Automated blog post and thought leadership pipeline — Parkk Technology",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "form-data": "^4.0.0",
+    "puppeteer": "^24.0.0"
+  }
+}
