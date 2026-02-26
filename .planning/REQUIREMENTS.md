@@ -59,10 +59,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Thought Leadership
 
-- [ ] **LEAD-01**: Weekly generator rotates through 5 content pillars
-- [ ] **LEAD-02**: Each pillar has 5 angle variations, auto-selected by week number
-- [ ] **LEAD-03**: Generated posts use same SEO/schema structure as commit posts
-- [ ] **LEAD-04**: Posts published as draft to WordPress
+- [x] **LEAD-01**: Weekly generator rotates through 5 content pillars
+- [x] **LEAD-02**: Each pillar has 5 angle variations, auto-selected by week number
+- [x] **LEAD-03**: Generated posts use same SEO/schema structure as commit posts
+- [x] **LEAD-04**: Posts published as draft to WordPress
 
 ### GitHub Actions
 
@@ -132,10 +132,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SCHM-02 | Phase 2 | Complete |
 | NOTF-01 | Phase 2 | Complete |
 | NOTF-02 | Phase 2 | Complete |
-| LEAD-01 | Phase 3 | Pending |
-| LEAD-02 | Phase 3 | Pending |
-| LEAD-03 | Phase 3 | Pending |
-| LEAD-04 | Phase 3 | Pending |
+| LEAD-01 | Phase 3 | Complete |
+| LEAD-02 | Phase 3 | Complete |
+| LEAD-03 | Phase 3 | Complete |
+| LEAD-04 | Phase 3 | Complete |
 | ACTN-01 | Phase 3 | Pending |
 | ACTN-02 | Phase 3 | Pending |
 | ACTN-03 | Phase 3 | Pending |
