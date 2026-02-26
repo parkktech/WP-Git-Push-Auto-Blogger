@@ -34,6 +34,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **PUBL-05**: Puppeteer captures screenshots of configured staging URLs
 - [ ] **PUBL-06**: Screenshots uploaded to WordPress media library via REST API
 - [ ] **PUBL-07**: Featured image set from uploaded screenshots
+- [ ] **PUBL-08**: When screenshots are unavailable, relevant stock images downloaded from free API (Pexels/Unsplash)
+- [ ] **PUBL-09**: Stock images uploaded to WordPress media library and used as post images
 
 ### Schema & SEO
 
@@ -105,13 +107,57 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated during roadmap creation) | | |
+| BRAND-01 | Phase 1 | Pending |
+| BRAND-02 | Phase 1 | Pending |
+| BRAND-03 | Phase 1 | Pending |
+| BRAND-04 | Phase 1 | Pending |
+| BRAND-05 | Phase 1 | Pending |
+| PIPE-01 | Phase 2 | Pending |
+| PIPE-02 | Phase 2 | Pending |
+| PIPE-03 | Phase 2 | Pending |
+| PIPE-04 | Phase 2 | Pending |
+| PIPE-05 | Phase 2 | Pending |
+| PIPE-06 | Phase 2 | Pending |
+| PIPE-07 | Phase 2 | Pending |
+| PUBL-01 | Phase 2 | Pending |
+| PUBL-02 | Phase 2 | Pending |
+| PUBL-03 | Phase 2 | Pending |
+| PUBL-04 | Phase 2 | Pending |
+| PUBL-05 | Phase 2 | Pending |
+| PUBL-06 | Phase 2 | Pending |
+| PUBL-07 | Phase 2 | Pending |
+| PUBL-08 | Phase 2 | Pending |
+| PUBL-09 | Phase 2 | Pending |
+| SCHM-01 | Phase 2 | Pending |
+| SCHM-02 | Phase 2 | Pending |
+| NOTF-01 | Phase 2 | Pending |
+| NOTF-02 | Phase 2 | Pending |
+| LEAD-01 | Phase 3 | Pending |
+| LEAD-02 | Phase 3 | Pending |
+| LEAD-03 | Phase 3 | Pending |
+| LEAD-04 | Phase 3 | Pending |
+| ACTN-01 | Phase 3 | Pending |
+| ACTN-02 | Phase 3 | Pending |
+| ACTN-03 | Phase 3 | Pending |
+| ACTN-04 | Phase 3 | Pending |
+| PLUG-01 | Phase 4 | Pending |
+| PLUG-02 | Phase 4 | Pending |
+| PLUG-03 | Phase 4 | Pending |
+| PLUG-04 | Phase 4 | Pending |
+| PLUG-05 | Phase 4 | Pending |
+| PLUG-06 | Phase 4 | Pending |
+| PLUG-07 | Phase 4 | Pending |
+| PLUG-08 | Phase 4 | Pending |
+| PLUG-09 | Phase 4 | Pending |
+| SCHM-03 | Phase 4 | Pending |
+| SCHM-04 | Phase 4 | Pending |
+| SCHM-05 | Phase 4 | Pending |
 
 **Coverage:**
-- v1 requirements: 35 total
-- Mapped to phases: 0
-- Unmapped: 35 ⚠️
+- v1 requirements: 45 total
+- Mapped to phases: 45
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-25*
-*Last updated: 2026-02-25 after initial definition*
+*Last updated: 2026-02-25 after roadmap creation*
