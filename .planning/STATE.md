@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 3 of 4 (Thought Leadership and Automation)
-Plan: 1 of 2 in current phase
-Status: Phase 3 plan 01 complete. Thought leadership generator built. Plan 02 (GitHub Actions workflows) remaining.
-Last activity: 2026-02-26 — Completed 03-01-PLAN.md (thought leadership generator)
+Plan: 2 of 2 in current phase — PHASE 3 COMPLETE
+Status: Phase 3 complete. Both thought leadership generator and GitHub Actions workflows delivered.
+Last activity: 2026-02-26 — Completed 03-02-PLAN.md (GitHub Actions workflows)
 
-Progress: [█████░░░░░] 50%
+Progress: [███████░░░] 75%
 
 ## Performance Metrics
 
@@ -41,6 +41,7 @@ Progress: [█████░░░░░] 50%
 | Phase 02 P03 | 2 min | 2 tasks | 1 files |
 | Phase 02 P04 | 6 min | 3 tasks | 1 files |
 | Phase 03-thought-leadership-and-automation P01 | 2 | 2 tasks | 1 files |
+| Phase 03-thought-leadership-and-automation P02 | 2 min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -70,6 +71,9 @@ Recent decisions affecting current work:
 - [Phase 03-thought-leadership-and-automation]: Pillar rotation via weekNumber % 5 arithmetic — deterministic, zero-dependency, fully testable offline
 - [Phase 03-thought-leadership-and-automation]: Angle index shifts every 5 weeks (floor(week/5) % 5) — 25-week cycle covers all 25 unique pillar+angle combinations
 - [Phase 03-thought-leadership-and-automation]: No screenshots in thought leadership posts — stock images only (pillar.name as Unsplash search query)
+- [Phase 03-thought-leadership-and-automation]: paths-ignore blocks docs/planning/workflow commits from triggering blog-post workflow — saves CI minutes
+- [Phase 03-thought-leadership-and-automation]: COMMIT_DIFF extracted via inline shell variable (not step outputs) to avoid ~1MB truncation on large diffs
+- [Phase 03-thought-leadership-and-automation]: git log used for commit data — github.event.head_commit.message undefined on workflow_dispatch events
 
 ### Pending Todos
 
@@ -84,5 +88,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-26
-Stopped at: Completed 03-01-PLAN.md (thought leadership generator)
-Resume file: .planning/phases/03-thought-leadership-and-automation/03-02-PLAN.md
+Stopped at: Completed 03-02-PLAN.md (GitHub Actions workflows) — Phase 3 complete
+Resume file: .planning/phases/04-wordpress-plugin/04-01-PLAN.md

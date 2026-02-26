@@ -66,10 +66,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### GitHub Actions
 
-- [ ] **ACTN-01**: Push-to-main workflow triggers blog post generation
-- [ ] **ACTN-02**: Weekly cron workflow (Monday 8am UTC) triggers thought leadership
-- [ ] **ACTN-03**: Workflows use org-level secrets and per-repo variables
-- [ ] **ACTN-04**: Concurrency controls prevent duplicate post creation
+- [x] **ACTN-01**: Push-to-main workflow triggers blog post generation
+- [x] **ACTN-02**: Weekly cron workflow (Monday 8am UTC) triggers thought leadership
+- [x] **ACTN-03**: Workflows use org-level secrets and per-repo variables
+- [x] **ACTN-04**: Concurrency controls prevent duplicate post creation
 
 ### Notifications
 
@@ -136,10 +136,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LEAD-02 | Phase 3 | Complete |
 | LEAD-03 | Phase 3 | Complete |
 | LEAD-04 | Phase 3 | Complete |
-| ACTN-01 | Phase 3 | Pending |
-| ACTN-02 | Phase 3 | Pending |
-| ACTN-03 | Phase 3 | Pending |
-| ACTN-04 | Phase 3 | Pending |
+| ACTN-01 | Phase 3 | Complete |
+| ACTN-02 | Phase 3 | Complete |
+| ACTN-03 | Phase 3 | Complete |
+| ACTN-04 | Phase 3 | Complete |
 | PLUG-01 | Phase 4 | Pending |
 | PLUG-02 | Phase 4 | Pending |
 | PLUG-03 | Phase 4 | Pending |
