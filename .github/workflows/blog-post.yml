@@ -1,0 +1,80 @@
+# .github/workflows/blog-post.yml
+#
+# Blog Post Generator
+# Triggered on every push to main (excluding docs/planning/workflow-only commits).
+# Also supports manual dispatch via workflow_dispatch for testing.
+#
+# Concurrency: at most one run active at a time per workflow name.
+# If a second push arrives while a run is in progress, the in-progress run is
+# canceled and the new push takes over — guaranteeing the post always reflects
+# the most recent commit.
+
+name: Blog Post Generator
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.github/**'
+      - '.planning/**'
+      - '**.md'
+      - 'wordpress-plugin/**'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      # ── Secrets (sensitive — never expose in logs) ──────────────────────────
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      WP_API_URL: ${{ secrets.WP_API_URL }}
+      WP_USER: ${{ secrets.WP_USER }}
+      WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+      # ── Variables (non-sensitive config) ────────────────────────────────────
+      PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+      PROJECT_URL: ${{ vars.PROJECT_URL }}
+      PROJECT_DESCRIPTION: ${{ vars.PROJECT_DESCRIPTION }}
+      SCREENSHOT_URLS: ${{ vars.SCREENSHOT_URLS }}
+      MIN_WORTHINESS_SCORE: ${{ vars.MIN_WORTHINESS_SCORE }}
+      PUBLISH_STATUS: ${{ vars.PUBLISH_STATUS }}
+      WORDPRESS_SEO_PLUGIN: ${{ vars.WORDPRESS_SEO_PLUGIN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # fetch-depth: 2 is required for git diff HEAD~1 HEAD to work.
+          # Default depth is 1 (current commit only) — no parent to diff against.
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: scripts
+
+      - name: Generate blog post
+        # Commit data is extracted inline via shell variable assignment rather than
+        # step outputs ($GITHUB_OUTPUT) to avoid the ~1MB truncation limit on large diffs.
+        #
+        # git log is used instead of github.event.head_commit.message because the
+        # latter is undefined on workflow_dispatch events.
+        #
+        # Lock files, node_modules, and package-lock.json are excluded from the diff
+        # to prevent noise from reaching Claude.
+        run: |
+          COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s') \
+          COMMIT_AUTHOR=$(git log -1 --pretty=format:'%ae') \
+          COMMIT_DIFF=$(git diff HEAD~1 HEAD -- . ':!*.lock' ':!node_modules' ':!package-lock.json') \
+          node scripts/generate-blog-post.js
