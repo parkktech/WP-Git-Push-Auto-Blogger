@@ -76,7 +76,12 @@ Plans:
   3. `robots.txt` includes Allow rules for at least 13 AI crawler user agents
   4. The Google Rich Results Test validates ProfessionalService + Organization schema on the site homepage
   5. A post created via WordPress REST API with Yoast or RankMath meta fields in the `meta` object has those fields saved — verified by fetching the post and confirming values match what was sent
-**Plans**: TBD
+**Plans:** 4 plans
+Plans:
+- [ ] 04-01-PLAN.md — Plugin scaffold with SEO meta bridge and robots.txt AI crawler manager
+- [ ] 04-02-PLAN.md — AI bot markdown responder with identity block and Content-Signal headers
+- [ ] 04-03-PLAN.md — Sitewide schema injection (Organization, ProfessionalService, WebSite, Speakable)
+- [ ] 04-04-PLAN.md — llms.txt and llms-full.txt endpoints with transient caching
 
 ## Progress
 
@@ -88,4 +93,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Brand Voice Foundation | 1/1 | Complete | 2026-02-26 |
 | 2. Blog Post Generator | 5/5 | Complete   | 2026-02-26 |
 | 3. Thought Leadership and Automation | 2/2 | Complete   | 2026-02-26 |
-| 4. WordPress AI Discovery Plugin | 0/? | Not started | - |
+| 4. WordPress AI Discovery Plugin | 0/4 | Planning complete | - |
