@@ -277,7 +277,7 @@ async function evaluateProjectForShowcase(info) {
 
     const response = await client.messages.create({
         model: 'claude-sonnet-4-6',
-        max_tokens: 512,
+        max_tokens: 1024,
         system: `You are a content strategist evaluating whether a software project is mature enough for a portfolio showcase blog post. Score 1-10.
 
 Criteria for a high score (7+):
@@ -325,7 +325,7 @@ async function evaluateProgressUpdate(info, commitsSinceLastPost) {
 
     const response = await client.messages.create({
         model: 'claude-sonnet-4-6',
-        max_tokens: 512,
+        max_tokens: 1024,
         system: `You are a content strategist evaluating whether recent development progress on a software project warrants a blog post update. Score 1-10.
 
 High score (7+): New features, major milestones, significant refactors, new integrations, or architectural improvements that demonstrate ongoing engineering work.
