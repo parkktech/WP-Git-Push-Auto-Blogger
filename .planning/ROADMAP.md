@@ -61,7 +61,10 @@ Plans:
   2. The thought leadership workflow fires on Monday at 8am UTC (or manually dispatched for testing) and produces a WordPress draft from one of the 5 content pillars
   3. Each content pillar's angle selection is deterministic by ISO week number — the same week always selects the same pillar/angle combination
   4. Running two workflow triggers simultaneously does not produce duplicate WordPress posts — concurrency controls cancel the older run
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 03-01-PLAN.md — Thought leadership generator with pillar rotation and Claude generation
+- [ ] 03-02-PLAN.md — GitHub Actions workflows (blog-post push trigger + thought-leadership cron)
 
 ### Phase 4: WordPress AI Discovery Plugin
 **Goal**: Installing the plugin on parkktech.com enables AI bots to receive markdown content, exposes /llms.txt and /llms-full.txt, injects sitewide ProfessionalService and Organization schema, adds AI crawler Allow rules to robots.txt, and registers SEO meta fields so REST API writes from the generator are saved correctly
@@ -84,5 +87,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Brand Voice Foundation | 1/1 | Complete | 2026-02-26 |
 | 2. Blog Post Generator | 5/5 | Complete   | 2026-02-26 |
-| 3. Thought Leadership and Automation | 0/? | Not started | - |
+| 3. Thought Leadership and Automation | 0/2 | In progress | - |
 | 4. WordPress AI Discovery Plugin | 0/? | Not started | - |
