@@ -13,7 +13,7 @@ Four phases deliver the full automated content pipeline: starting with the brand
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Brand Voice Foundation** - Build the shared brand module both generators import for identity, messaging, and framing
-- [ ] **Phase 2: Blog Post Generator** - Commit-to-WordPress-draft pipeline with SEO meta, schema, screenshots, and Telegram notification
+- [x] **Phase 2: Blog Post Generator** - Commit-to-WordPress-draft pipeline with SEO meta, schema, screenshots, and Telegram notification (completed 2026-02-26)
 - [ ] **Phase 3: Thought Leadership and Automation** - Weekly content generator plus GitHub Actions wiring for both pipeline triggers
 - [ ] **Phase 4: WordPress AI Discovery Plugin** - AI bot detection, markdown serving, llms.txt, sitewide schema, and robots.txt optimization
 
@@ -44,7 +44,7 @@ Plans:
   4. The created WordPress draft has Yoast or RankMath SEO meta fields populated — verified by fetching the post via REST API and confirming the fields are non-empty
   5. When SCREENSHOT_URLS is not configured, relevant stock images are downloaded and used as post images instead
   6. A Telegram message is received containing the post URL, worthiness score, and generation status within seconds of the script completing
-**Plans:** 5 plans
+**Plans:** 5/5 plans complete
 Plans:
 - [ ] 02-01-PLAN.md — Content evaluation and generation module (skip patterns, worthiness scoring, blog post generation with Claude structured outputs)
 - [ ] 02-02-PLAN.md — Media pipeline module (Puppeteer screenshots, Unsplash stock images)
@@ -83,6 +83,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Brand Voice Foundation | 1/1 | Complete | 2026-02-26 |
-| 2. Blog Post Generator | 0/? | Not started | - |
+| 2. Blog Post Generator | 5/5 | Complete   | 2026-02-26 |
 | 3. Thought Leadership and Automation | 0/? | Not started | - |
 | 4. WordPress AI Discovery Plugin | 0/? | Not started | - |

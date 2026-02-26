@@ -73,8 +73,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Notifications
 
-- [ ] **NOTF-01**: Telegram notification sent with post link and content scores
-- [ ] **NOTF-02**: Notification includes worthiness score and generation status
+- [x] **NOTF-01**: Telegram notification sent with post link and content scores
+- [x] **NOTF-02**: Notification includes worthiness score and generation status
 
 ## v2 Requirements
 
@@ -130,8 +130,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PUBL-09 | Phase 2 | Complete |
 | SCHM-01 | Phase 2 | Complete |
 | SCHM-02 | Phase 2 | Complete |
-| NOTF-01 | Phase 2 | Pending |
-| NOTF-02 | Phase 2 | Pending |
+| NOTF-01 | Phase 2 | Complete |
+| NOTF-02 | Phase 2 | Complete |
 | LEAD-01 | Phase 3 | Pending |
 | LEAD-02 | Phase 3 | Pending |
 | LEAD-03 | Phase 3 | Pending |

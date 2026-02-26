@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 
 Phase: 2 of 4 (Blog Post Generator)
 Plan: 5 of 5 in current phase
-Status: Plan 02-03 complete
-Last activity: 2026-02-26 — Completed 02-03-PLAN.md (WordPress REST API client)
+Status: Plan 02-04 complete
+Last activity: 2026-02-26 — Completed 02-04-PLAN.md (Main pipeline orchestrator)
 
 Progress: [██░░░░░░░░] 25%
 
@@ -39,6 +39,7 @@ Progress: [██░░░░░░░░] 25%
 | Phase 02 P05 | 1 min | 1 tasks | 1 files |
 | Phase 02 P02 | 1 | 2 tasks | 1 files |
 | Phase 02 P03 | 2 min | 2 tasks | 1 files |
+| Phase 02 P04 | 6 min | 3 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -61,6 +62,10 @@ Recent decisions affecting current work:
 - [02-01]: Module-level Anthropic client singleton shared by evaluateWorthiness and generateBlogPost
 - [02-01]: Post-processing injects JSON-LD schema into htmlContent if Claude did not embed it inline
 - [02-01]: Screenshots sent as base64 image blocks for Claude vision capability
+- [02-04]: Telegram notification uses native fetch() -- no library (single HTTP POST to Bot API)
+- [02-04]: Stock images always searched alongside screenshots (supplement, not fallback) per locked CONTEXT.md decision
+- [02-04]: Unsplash attribution HTML appended to post htmlContent before WordPress upload
+- [02-04]: Input validation throws on missing COMMIT_MESSAGE or COMMIT_DIFF (required env vars)
 
 ### Pending Todos
 
@@ -75,5 +80,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-26
-Stopped at: Completed 02-01-PLAN.md (commit evaluation and blog post generation)
+Stopped at: Completed 02-04-PLAN.md (Main pipeline orchestrator)
 Resume file: None
