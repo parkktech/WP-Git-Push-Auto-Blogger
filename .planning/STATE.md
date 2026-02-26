@@ -36,6 +36,7 @@ Progress: [██░░░░░░░░] 25%
 *Updated after each plan completion*
 
 | Phase 02 P05 | 1 min | 1 tasks | 1 files |
+| Phase 02 P02 | 1 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -52,6 +53,7 @@ Recent decisions affecting current work:
 - [01-01]: Used module-level counter (not time-based seed) for urgency block rotation
 - [02-05]: Register all 6 SEO fields unconditionally (no class_exists checks) for pipeline testing flexibility
 - [02-05]: Single-file plugin designed as temporary bridge stub to be absorbed into Phase 4 parkk-ai-discovery.php
+- [Phase 02-02]: Used native fetch() for Unsplash API calls (zero new dependencies)
 
 ### Pending Todos
 
@@ -66,5 +68,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-26
-Stopped at: Completed 02-05-PLAN.md
+Stopped at: Completed 02-02-PLAN.md (media pipeline with Puppeteer screenshots and Unsplash stock images)
 Resume file: None

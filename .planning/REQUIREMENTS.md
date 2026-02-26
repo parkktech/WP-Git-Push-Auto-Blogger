@@ -31,11 +31,11 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **PUBL-02**: Posts default to draft status (configurable via PUBLISH_STATUS)
 - [x] **PUBL-03**: SEO meta fields populated for Yoast or RankMath (title, description, focus keyword)
 - [x] **PUBL-04**: Focus keyword and secondary keywords set per post
-- [ ] **PUBL-05**: Puppeteer captures screenshots of configured staging URLs
+- [x] **PUBL-05**: Puppeteer captures screenshots of configured staging URLs
 - [ ] **PUBL-06**: Screenshots uploaded to WordPress media library via REST API
 - [ ] **PUBL-07**: Featured image set from uploaded screenshots
-- [ ] **PUBL-08**: When screenshots are unavailable, relevant stock images downloaded from free API (Pexels/Unsplash)
-- [ ] **PUBL-09**: Stock images uploaded to WordPress media library and used as post images
+- [x] **PUBL-08**: When screenshots are unavailable, relevant stock images downloaded from free API (Pexels/Unsplash)
+- [x] **PUBL-09**: Stock images uploaded to WordPress media library and used as post images
 
 ### Schema & SEO
 
@@ -123,11 +123,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PUBL-02 | Phase 2 | Pending |
 | PUBL-03 | Phase 2 | Complete |
 | PUBL-04 | Phase 2 | Complete |
-| PUBL-05 | Phase 2 | Pending |
+| PUBL-05 | Phase 2 | Complete |
 | PUBL-06 | Phase 2 | Pending |
 | PUBL-07 | Phase 2 | Pending |
-| PUBL-08 | Phase 2 | Pending |
-| PUBL-09 | Phase 2 | Pending |
+| PUBL-08 | Phase 2 | Complete |
+| PUBL-09 | Phase 2 | Complete |
 | SCHM-01 | Phase 2 | Pending |
 | SCHM-02 | Phase 2 | Pending |
 | NOTF-01 | Phase 2 | Pending |
