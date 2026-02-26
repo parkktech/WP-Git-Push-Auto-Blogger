@@ -187,11 +187,9 @@ Criteria for a low score (1-6):
             role: 'user',
             content: `Evaluate this project for a portfolio showcase blog post:\n\n${projectContext}`,
         }],
-        response_format: {
-            type: 'json_schema',
-            json_schema: {
-                name: 'project_evaluation',
-                strict: true,
+        output_config: {
+            format: {
+                type: 'json_schema',
                 schema: {
                     type: 'object',
                     properties: {
@@ -227,11 +225,9 @@ Low score (1-6): Minor fixes, dependency updates, trivial tweaks, or too few mea
             role: 'user',
             content: `Project: ${info.name}\nDescription: ${info.description}\n\nRecent commits since last blog post:\n${commitList}\n\nAre these changes significant enough for a progress update blog post?`,
         }],
-        response_format: {
-            type: 'json_schema',
-            json_schema: {
-                name: 'progress_evaluation',
-                strict: true,
+        output_config: {
+            format: {
+                type: 'json_schema',
                 schema: {
                     type: 'object',
                     properties: {
@@ -335,11 +331,9 @@ async function generatePost(systemPrompt, userMessage) {
         max_tokens: 8192,
         system: systemPrompt,
         messages: [{ role: 'user', content: userMessage }],
-        response_format: {
-            type: 'json_schema',
-            json_schema: {
-                name: 'blog_post',
-                strict: true,
+        output_config: {
+            format: {
+                type: 'json_schema',
                 schema: POST_JSON_SCHEMA,
             },
         },
