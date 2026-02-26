@@ -167,7 +167,7 @@ async function evaluateProjectForShowcase(info) {
     const projectContext = formatProjectContext(info);
 
     const response = await client.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 512,
         system: `You are a content strategist evaluating whether a software project is mature enough for a portfolio showcase blog post. Score 1-10.
 
@@ -215,7 +215,7 @@ async function evaluateProgressUpdate(info, commitsSinceLastPost) {
         .join('\n');
 
     const response = await client.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 512,
         system: `You are a content strategist evaluating whether recent development progress on a software project warrants a blog post update. Score 1-10.
 
@@ -327,7 +327,7 @@ Return JSON matching the required schema.`;
 
 async function generatePost(systemPrompt, userMessage) {
     const response = await client.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 8192,
         system: systemPrompt,
         messages: [{ role: 'user', content: userMessage }],
