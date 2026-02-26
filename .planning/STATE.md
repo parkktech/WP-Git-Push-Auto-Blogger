@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 
 Phase: 2 of 4 (Blog Post Generator)
 Plan: 5 of 5 in current phase
-Status: Plan 02-05 complete
-Last activity: 2026-02-26 — Completed 02-05-PLAN.md (SEO meta bridge plugin stub)
+Status: Plan 02-03 complete
+Last activity: 2026-02-26 — Completed 02-03-PLAN.md (WordPress REST API client)
 
 Progress: [██░░░░░░░░] 25%
 
@@ -35,8 +35,10 @@ Progress: [██░░░░░░░░] 25%
 
 *Updated after each plan completion*
 
+| Phase 02 P01 | 2 min | 2 tasks | 1 files |
 | Phase 02 P05 | 1 min | 1 tasks | 1 files |
 | Phase 02 P02 | 1 | 2 tasks | 1 files |
+| Phase 02 P03 | 2 min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -54,6 +56,8 @@ Recent decisions affecting current work:
 - [02-05]: Register all 6 SEO fields unconditionally (no class_exists checks) for pipeline testing flexibility
 - [02-05]: Single-file plugin designed as temporary bridge stub to be absorbed into Phase 4 parkk-ai-discovery.php
 - [Phase 02-02]: Used native fetch() for Unsplash API calls (zero new dependencies)
+- [02-03]: Raw binary POST for media upload (not multipart form-data) per WordPress media endpoint spec
+- [02-03]: SEO meta writes all 6 fields when plugin mode is 'both' -- WordPress silently drops unregistered fields
 
 ### Pending Todos
 
@@ -68,5 +72,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-26
-Stopped at: Completed 02-02-PLAN.md (media pipeline with Puppeteer screenshots and Unsplash stock images)
+Stopped at: Completed 02-03-PLAN.md (WordPress REST API client)
 Resume file: None

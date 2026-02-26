@@ -27,13 +27,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### WordPress Publishing
 
-- [ ] **PUBL-01**: Post created via WordPress REST API with Application Password auth
-- [ ] **PUBL-02**: Posts default to draft status (configurable via PUBLISH_STATUS)
+- [x] **PUBL-01**: Post created via WordPress REST API with Application Password auth
+- [x] **PUBL-02**: Posts default to draft status (configurable via PUBLISH_STATUS)
 - [x] **PUBL-03**: SEO meta fields populated for Yoast or RankMath (title, description, focus keyword)
 - [x] **PUBL-04**: Focus keyword and secondary keywords set per post
 - [x] **PUBL-05**: Puppeteer captures screenshots of configured staging URLs
-- [ ] **PUBL-06**: Screenshots uploaded to WordPress media library via REST API
-- [ ] **PUBL-07**: Featured image set from uploaded screenshots
+- [x] **PUBL-06**: Screenshots uploaded to WordPress media library via REST API
+- [x] **PUBL-07**: Featured image set from uploaded screenshots
 - [x] **PUBL-08**: When screenshots are unavailable, relevant stock images downloaded from free API (Pexels/Unsplash)
 - [x] **PUBL-09**: Stock images uploaded to WordPress media library and used as post images
 
@@ -119,13 +119,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PIPE-05 | Phase 2 | Pending |
 | PIPE-06 | Phase 2 | Pending |
 | PIPE-07 | Phase 2 | Pending |
-| PUBL-01 | Phase 2 | Pending |
-| PUBL-02 | Phase 2 | Pending |
+| PUBL-01 | Phase 2 | Complete |
+| PUBL-02 | Phase 2 | Complete |
 | PUBL-03 | Phase 2 | Complete |
 | PUBL-04 | Phase 2 | Complete |
 | PUBL-05 | Phase 2 | Complete |
-| PUBL-06 | Phase 2 | Pending |
-| PUBL-07 | Phase 2 | Pending |
+| PUBL-06 | Phase 2 | Complete |
+| PUBL-07 | Phase 2 | Complete |
 | PUBL-08 | Phase 2 | Complete |
 | PUBL-09 | Phase 2 | Complete |
 | SCHM-01 | Phase 2 | Pending |
