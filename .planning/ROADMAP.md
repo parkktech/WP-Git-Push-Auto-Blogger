@@ -44,7 +44,12 @@ Plans:
   4. The created WordPress draft has Yoast or RankMath SEO meta fields populated — verified by fetching the post via REST API and confirming the fields are non-empty
   5. When SCREENSHOT_URLS is not configured, relevant stock images are downloaded and used as post images instead
   6. A Telegram message is received containing the post URL, worthiness score, and generation status within seconds of the script completing
-**Plans**: TBD
+**Plans:** 4 plans
+Plans:
+- [ ] 02-01-PLAN.md — Content evaluation and generation module (skip patterns, worthiness scoring, blog post generation with Claude structured outputs)
+- [ ] 02-02-PLAN.md — Media pipeline module (Puppeteer screenshots, Unsplash stock images)
+- [ ] 02-03-PLAN.md — WordPress client module (media upload, category/tag resolution, post creation with SEO meta)
+- [ ] 02-04-PLAN.md — Main orchestrator and notifications (pipeline wiring, Telegram notifications, end-to-end verification)
 
 ### Phase 3: Thought Leadership and Automation
 **Goal**: A weekly thought leadership post auto-generates via Monday cron, both generators run on automated triggers with concurrency controls, and all secrets and per-repo variables are wired correctly through GitHub Actions
