@@ -1,0 +1,68 @@
+# .github/workflows/thought-leadership.yml
+#
+# Thought Leadership Generator
+# Triggered on a Monday 8:00 AM UTC cron schedule.
+# Also supports manual dispatch via workflow_dispatch for testing.
+#
+# Note: GitHub-hosted cron jobs may run up to 15-30 minutes late during
+# high-load periods — this is acceptable for a weekly thought leadership post.
+#
+# Concurrency: at most one run active at a time per workflow name.
+# The group key is "Thought Leadership Generator" — distinct from
+# "Blog Post Generator" — so the two workflows cannot cancel each other.
+#
+# PUBLISH_STATUS defaults to 'draft' if the variable is not set (handled
+# in wp-client.js via process.env.PUBLISH_STATUS || 'draft'). Ensure the
+# repository variable is set to 'draft' to override any org-level setting.
+
+name: Thought Leadership Generator
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'   # Monday 8:00 AM UTC
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      # ── Secrets (sensitive — never expose in logs) ──────────────────────────
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      WP_API_URL: ${{ secrets.WP_API_URL }}
+      WP_USER: ${{ secrets.WP_USER }}
+      WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+      # ── Variables (non-sensitive config) ────────────────────────────────────
+      # PUBLISH_STATUS defaults to 'draft' in wp-client.js if not set here.
+      PUBLISH_STATUS: ${{ vars.PUBLISH_STATUS }}
+      WORDPRESS_SEO_PLUGIN: ${{ vars.WORDPRESS_SEO_PLUGIN }}
+      # Note: PROJECT_NAME, PROJECT_URL, PROJECT_DESCRIPTION, SCREENSHOT_URLS,
+      # and MIN_WORTHINESS_SCORE are NOT included — the thought leadership script
+      # derives topic from the current date and does not use commit context,
+      # project screenshots, or worthiness scoring.
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        # Default checkout depth (1) is sufficient — no commit diff needed.
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: scripts
+
+      - name: Generate thought leadership post
+        # The script derives pillar and angle deterministically from the current
+        # ISO week number — no inputs required. Manual dispatch runs the current
+        # week's selection automatically.
+        run: node scripts/generate-thought-leadership.js
