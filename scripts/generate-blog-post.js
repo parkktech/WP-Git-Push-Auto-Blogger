@@ -4,10 +4,68 @@ const { shouldSkipCommit, evaluateWorthiness, generateBlogPost, WORTHINESS_THRES
 const { captureScreenshots, searchUnsplash } = require('./media-pipeline');
 const { uploadMedia, createWordPressPost } = require('./wp-client');
 
-// ─── Telegram Notification (stub — Task 2 replaces this) ────────────────────
+// ─── Telegram Notification ───────────────────────────────────────────────────
 
-async function sendTelegramNotification() {
-  console.log('Telegram: not yet implemented');
+/**
+ * Sends a Telegram notification about a newly created blog post draft.
+ *
+ * - Non-fatal: entire function is wrapped in try/catch. Telegram failure
+ *   NEVER causes the pipeline to exit with an error.
+ * - Graceful skip: if TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is missing,
+ *   logs and returns without error.
+ * - Uses native fetch() to Telegram Bot API (no library).
+ * - HTML parse mode with proper escaping for user-generated text.
+ *
+ * @param {string} postUrl - WordPress draft URL
+ * @param {number} score - Worthiness score (1-10)
+ * @param {string} postTitle - Blog post title (user-generated, needs escaping)
+ */
+async function sendTelegramNotification(postUrl, score, postTitle) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!token || !chatId) {
+    console.log('Telegram not configured — skipping notification');
+    return;
+  }
+
+  // Escape HTML special characters in user-generated text (see Pitfall 6 from research)
+  const safeTitle = postTitle
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  const message = [
+    '<b>New blog post draft created</b>',
+    '',
+    `<b>Title:</b> ${safeTitle}`,
+    `<b>Worthiness score:</b> ${score}/10`,
+    `<b>Status:</b> Draft`,
+    '',
+    `<a href="${postUrl}">View draft in WordPress</a>`,
+  ].join('\n');
+
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message,
+        parse_mode: 'HTML',
+        disable_web_page_preview: false,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error(`Telegram notification failed: ${response.status} ${await response.text()}`);
+    } else {
+      console.log('Telegram notification sent');
+    }
+  } catch (err) {
+    // Non-fatal — pipeline already succeeded at this point
+    console.error('Telegram notification error (non-fatal):', err.message);
+  }
 }
 
 // ─── Main Pipeline Orchestrator ──────────────────────────────────────────────
