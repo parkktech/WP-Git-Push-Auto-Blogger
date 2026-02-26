@@ -29,6 +29,7 @@ $class_files = [
     'class-ai-responder',
     'class-schema-injector',
     'class-llms-endpoints',
+    'class-admin-settings',
 ];
 
 foreach ( $class_files as $file ) {
@@ -56,6 +57,9 @@ function parkk_ai_discovery_init() {
     }
     if ( class_exists( 'Parkk_LLMS_Endpoints' ) ) {
         new Parkk_LLMS_Endpoints();
+    }
+    if ( class_exists( 'Parkk_Admin_Settings' ) ) {
+        new Parkk_Admin_Settings();
     }
 }
 add_action( 'init', 'parkk_ai_discovery_init' );
