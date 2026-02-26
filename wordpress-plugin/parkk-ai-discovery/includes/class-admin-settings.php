@@ -284,7 +284,29 @@ class Parkk_Admin_Settings {
                 </tbody>
             </table>
 
-            <h3>Step 3: Test It</h3>
+            <h3>Step 3: Multi-Repo Polling (Auto-Discover All Repos)</h3>
+            <div class="card" style="max-width: 700px; padding: 16px 20px;">
+                <p>The <strong>Multi-Repo Blog Generator</strong> automatically scans all your GitHub repos every hour for new commits and generates blog posts. New repos are discovered automatically &mdash; zero setup per repo.</p>
+                <p>Add these two additional items to enable it:</p>
+                <table class="widefat striped" style="margin: 12px 0;">
+                    <thead><tr><th>Type</th><th>Name</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Secret</strong></td>
+                            <td><code>GH_PAT</code></td>
+                            <td>A GitHub Personal Access Token with <code>repo</code> scope. Create one at <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a>.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Variable</strong></td>
+                            <td><code>GITHUB_ORG</code></td>
+                            <td>Your GitHub organization or username (e.g. <code>parkktech</code>). All non-archived, non-fork repos under this account will be polled.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Once set, the Multi-Repo Blog Generator workflow runs every hour automatically. You can also trigger it manually from the Actions tab.</p>
+            </div>
+
+            <h3>Step 4: Test It</h3>
             <div class="card" style="max-width: 700px; padding: 16px 20px;">
                 <p><strong>Test the blog post pipeline:</strong></p>
                 <p>Go to your GitHub repo &rarr; <strong>Actions</strong> tab &rarr; <strong>Blog Post Generator</strong> &rarr; <strong>Run workflow</strong> button. Or push a meaningful code commit to <code>main</code>.</p>

@@ -1,0 +1,74 @@
+# .github/workflows/multi-repo-blog.yml
+#
+# Multi-Repo Blog Generator
+# Polls ALL repositories in the organization for recent commits, evaluates
+# worthiness, and generates blog posts. New repos are automatically discovered.
+#
+# Runs every hour. Uses actions/cache to track processed commits (dedup).
+# Skips the current repo (it has its own push-triggered workflow).
+#
+# Required secret: GH_PAT — a Personal Access Token with `repo` scope
+# Required variable: GITHUB_ORG — your GitHub org or username
+
+name: Multi-Repo Blog Generator
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # Every hour
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    env:
+      # ── Cross-repo access ─────────────────────────────────────────────────
+      GH_PAT: ${{ secrets.GH_PAT }}
+      GITHUB_ORG: ${{ vars.GITHUB_ORG }}
+      # ── Secrets ────────────────────────────────────────────────────────────
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      WP_API_URL: ${{ secrets.WP_API_URL }}
+      WP_USER: ${{ secrets.WP_USER }}
+      WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+      UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      # ── Variables ──────────────────────────────────────────────────────────
+      MIN_WORTHINESS_SCORE: ${{ vars.MIN_WORTHINESS_SCORE }}
+      PUBLISH_STATUS: ${{ vars.PUBLISH_STATUS }}
+      WORDPRESS_SEO_PLUGIN: ${{ vars.WORDPRESS_SEO_PLUGIN }}
+      POLL_HOURS: '2'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: scripts
+
+      - name: Restore poll state
+        uses: actions/cache/restore@v4
+        with:
+          path: scripts/.poll-state.json
+          key: poll-state-${{ github.run_id }}
+          restore-keys: |
+            poll-state-
+
+      - name: Poll repos and generate blog posts
+        run: node scripts/poll-repos.js
+
+      - name: Save poll state
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: scripts/.poll-state.json
+          key: poll-state-${{ github.run_id }}
