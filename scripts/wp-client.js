@@ -180,7 +180,86 @@ async function resolveOrCreateTagIds(tagStrings) {
 }
 
 // ---------------------------------------------------------------------------
+// Part D — Post creation with SEO meta
+// ---------------------------------------------------------------------------
+
+/**
+ * Create a WordPress post with full metadata including SEO fields.
+ *
+ * Resolves category slugs and tag strings to integer IDs internally,
+ * builds the SEO meta object based on the active plugin, and POSTs
+ * the complete payload to /wp/v2/posts.
+ *
+ * @param {Object} post - Post data object
+ * @param {string} post.title          - Post title
+ * @param {string} post.slug           - URL slug
+ * @param {string} post.htmlContent    - Full HTML content body
+ * @param {string} post.excerpt        - Post excerpt
+ * @param {string} post.seoTitle       - SEO title (may differ from post title)
+ * @param {string} post.metaDescription - Meta description for search results
+ * @param {string} post.focusKeyword   - Primary focus keyword
+ * @param {string[]} post.secondaryKeywords - Secondary keywords (informational)
+ * @param {string[]} post.categories   - Category slug strings
+ * @param {string[]} post.tags         - Tag display strings
+ * @param {number[]} mediaIds          - WordPress media IDs (first becomes featured image)
+ * @param {string}  [seoPlugin]        - 'yoast', 'rankmath', or 'both' (default)
+ * @returns {Promise<Object>} Full WordPress response JSON (id, link, status, etc.)
+ */
+async function createWordPressPost(post, mediaIds, seoPlugin) {
+  // 1. Resolve taxonomy slugs/strings to WordPress integer IDs
+  const categoryIds = await resolveCategoryIds(post.categories);
+  const tagIds = await resolveOrCreateTagIds(post.tags);
+
+  // 2. Build SEO meta object based on the active plugin
+  const meta = {};
+  const plugin = seoPlugin || process.env.WORDPRESS_SEO_PLUGIN || 'both';
+
+  if (plugin === 'yoast' || plugin === 'both') {
+    meta['_yoast_wpseo_metadesc'] = post.metaDescription;
+    meta['_yoast_wpseo_focuskw'] = post.focusKeyword;
+    meta['_yoast_wpseo_title'] = post.seoTitle;
+  }
+  if (plugin === 'rankmath' || plugin === 'both') {
+    meta['rank_math_focus_keyword'] = post.focusKeyword;
+    meta['rank_math_description'] = post.metaDescription;
+    meta['rank_math_title'] = post.seoTitle;
+  }
+
+  // 3. Build the post payload
+  const payload = {
+    title: post.title,
+    slug: post.slug,
+    content: post.htmlContent,
+    excerpt: post.excerpt,
+    status: process.env.PUBLISH_STATUS || 'draft',
+    categories: categoryIds,
+    tags: tagIds,
+    featured_media: mediaIds.length > 0 ? mediaIds[0] : 0,
+    meta,
+  };
+
+  // 4. POST to WordPress
+  const response = await fetch(`${getApiUrl()}/wp/v2/posts`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Basic ${getAuth()}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Post creation failed (${response.status}): ${body}`);
+  }
+
+  const result = await response.json();
+  console.log(`WordPress post created: ${result.link} (status: ${result.status})`);
+  return result;
+}
+
+// ---------------------------------------------------------------------------
 // Exports
 // ---------------------------------------------------------------------------
 
-module.exports = { uploadMedia, resolveCategoryIds, resolveOrCreateTagIds };
+module.exports = { uploadMedia, resolveCategoryIds, resolveOrCreateTagIds, createWordPressPost };
