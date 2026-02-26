@@ -17,13 +17,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Content Pipeline
 
-- [ ] **PIPE-01**: Claude API evaluates commit worthiness on a 1-10 scale
-- [ ] **PIPE-02**: Commits scoring below threshold (default 6) are skipped
-- [ ] **PIPE-03**: Skip patterns filter out dependabot, merge commits, chore:, ci:, [skip-blog]
-- [ ] **PIPE-04**: Claude API generates full blog post JSON (title, slug, meta, HTML, schema, keywords, scores)
-- [ ] **PIPE-05**: Every post is framed as a portfolio piece with PROJECT_REGISTRY metadata
-- [ ] **PIPE-06**: Posts include answer-first content block (40-60 words) for AI Overview optimization
-- [ ] **PIPE-07**: Posts include FAQ section generated from brand voice templates
+- [x] **PIPE-01**: Claude API evaluates commit worthiness on a 1-10 scale
+- [x] **PIPE-02**: Commits scoring below threshold (default 6) are skipped
+- [x] **PIPE-03**: Skip patterns filter out dependabot, merge commits, chore:, ci:, [skip-blog]
+- [x] **PIPE-04**: Claude API generates full blog post JSON (title, slug, meta, HTML, schema, keywords, scores)
+- [x] **PIPE-05**: Every post is framed as a portfolio piece with PROJECT_REGISTRY metadata
+- [x] **PIPE-06**: Posts include answer-first content block (40-60 words) for AI Overview optimization
+- [x] **PIPE-07**: Posts include FAQ section generated from brand voice templates
 
 ### WordPress Publishing
 
@@ -39,8 +39,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Schema & SEO
 
-- [ ] **SCHM-01**: BlogPosting JSON-LD injected per post with author, publisher, keywords
-- [ ] **SCHM-02**: FAQPage JSON-LD generated per post from FAQ content
+- [x] **SCHM-01**: BlogPosting JSON-LD injected per post with author, publisher, keywords
+- [x] **SCHM-02**: FAQPage JSON-LD generated per post from FAQ content
 - [ ] **SCHM-03**: ProfessionalService + Organization schema injected sitewide
 - [ ] **SCHM-04**: Speakable schema applied to key content sections
 - [ ] **SCHM-05**: WebSite schema with search action injected sitewide
@@ -112,13 +112,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BRAND-03 | Phase 1 | Complete |
 | BRAND-04 | Phase 1 | Complete |
 | BRAND-05 | Phase 1 | Complete |
-| PIPE-01 | Phase 2 | Pending |
-| PIPE-02 | Phase 2 | Pending |
-| PIPE-03 | Phase 2 | Pending |
-| PIPE-04 | Phase 2 | Pending |
-| PIPE-05 | Phase 2 | Pending |
-| PIPE-06 | Phase 2 | Pending |
-| PIPE-07 | Phase 2 | Pending |
+| PIPE-01 | Phase 2 | Complete |
+| PIPE-02 | Phase 2 | Complete |
+| PIPE-03 | Phase 2 | Complete |
+| PIPE-04 | Phase 2 | Complete |
+| PIPE-05 | Phase 2 | Complete |
+| PIPE-06 | Phase 2 | Complete |
+| PIPE-07 | Phase 2 | Complete |
 | PUBL-01 | Phase 2 | Complete |
 | PUBL-02 | Phase 2 | Complete |
 | PUBL-03 | Phase 2 | Complete |
@@ -128,8 +128,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PUBL-07 | Phase 2 | Complete |
 | PUBL-08 | Phase 2 | Complete |
 | PUBL-09 | Phase 2 | Complete |
-| SCHM-01 | Phase 2 | Pending |
-| SCHM-02 | Phase 2 | Pending |
+| SCHM-01 | Phase 2 | Complete |
+| SCHM-02 | Phase 2 | Complete |
 | NOTF-01 | Phase 2 | Pending |
 | NOTF-02 | Phase 2 | Pending |
 | LEAD-01 | Phase 3 | Pending |

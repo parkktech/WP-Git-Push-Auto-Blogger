@@ -58,6 +58,9 @@ Recent decisions affecting current work:
 - [Phase 02-02]: Used native fetch() for Unsplash API calls (zero new dependencies)
 - [02-03]: Raw binary POST for media upload (not multipart form-data) per WordPress media endpoint spec
 - [02-03]: SEO meta writes all 6 fields when plugin mode is 'both' -- WordPress silently drops unregistered fields
+- [02-01]: Module-level Anthropic client singleton shared by evaluateWorthiness and generateBlogPost
+- [02-01]: Post-processing injects JSON-LD schema into htmlContent if Claude did not embed it inline
+- [02-01]: Screenshots sent as base64 image blocks for Claude vision capability
 
 ### Pending Todos
 
@@ -72,5 +75,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-26
-Stopped at: Completed 02-03-PLAN.md (WordPress REST API client)
+Stopped at: Completed 02-01-PLAN.md (commit evaluation and blog post generation)
 Resume file: None
