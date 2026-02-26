@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
+    "@slack/bolt": "^4.6.0",
+    "basic-ftp": "^5.2.0",
     "form-data": "^4.0.0",
     "puppeteer": "^24.0.0"
   }

@@ -259,7 +259,117 @@ async function createWordPressPost(post, mediaIds, seoPlugin) {
 }
 
 // ---------------------------------------------------------------------------
+// Part E — Plugin management (WP 5.5+ REST API)
+// ---------------------------------------------------------------------------
+
+/**
+ * List all installed plugins.
+ * Requires the Application Password user to have activate_plugins capability.
+ *
+ * @returns {Promise<Object[]>} Array of plugin objects with plugin, status, name, etc.
+ */
+async function listPlugins() {
+  const response = await fetch(`${getApiUrl()}/wp/v2/plugins`, {
+    headers: { 'Authorization': `Basic ${getAuth()}` },
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Plugin list failed (${response.status}): ${body}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Activate a plugin via the WP REST API.
+ *
+ * @param {string} pluginSlug  Plugin identifier (e.g. 'parkk-deploy-bridge/parkk-deploy-bridge')
+ * @returns {Promise<Object>}  Updated plugin object
+ */
+async function activatePlugin(pluginSlug) {
+  // WP REST API expects the slash literal in the URL path, not encoded
+  const response = await fetch(`${getApiUrl()}/wp/v2/plugins/${pluginSlug}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Basic ${getAuth()}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ status: 'active' }),
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Plugin activation failed for "${pluginSlug}" (${response.status}): ${body}`);
+  }
+
+  const result = await response.json();
+  console.log(`Plugin activated: ${result.name}`);
+  return result;
+}
+
+/**
+ * Deactivate a plugin via the WP REST API.
+ *
+ * @param {string} pluginSlug  Plugin identifier
+ * @returns {Promise<Object>}  Updated plugin object
+ */
+async function deactivatePlugin(pluginSlug) {
+  const response = await fetch(`${getApiUrl()}/wp/v2/plugins/${pluginSlug}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Basic ${getAuth()}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ status: 'inactive' }),
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Plugin deactivation failed for "${pluginSlug}" (${response.status}): ${body}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Check if the WordPress REST API is reachable.
+ *
+ * @returns {Promise<Object>}  { reachable: boolean, wpVersion: string|null }
+ */
+async function healthCheck() {
+  try {
+    const response = await fetch(`${getApiUrl()}/`, {
+      headers: { 'Authorization': `Basic ${getAuth()}` },
+    });
+
+    if (!response.ok) {
+      return { reachable: false, wpVersion: null, error: `HTTP ${response.status}` };
+    }
+
+    const data = await response.json();
+    return {
+      reachable: true,
+      wpVersion: data.description || null,
+      siteUrl: data.url || null,
+      name: data.name || null,
+    };
+  } catch (err) {
+    return { reachable: false, wpVersion: null, error: err.message };
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Exports
 // ---------------------------------------------------------------------------
 
-module.exports = { uploadMedia, resolveCategoryIds, resolveOrCreateTagIds, createWordPressPost };
+module.exports = {
+  uploadMedia,
+  resolveCategoryIds,
+  resolveOrCreateTagIds,
+  createWordPressPost,
+  listPlugins,
+  activatePlugin,
+  deactivatePlugin,
+  healthCheck,
+};
