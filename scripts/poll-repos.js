@@ -9,7 +9,7 @@ const { uploadMedia, createWordPressPost } = require('./wp-client');
 // ─── Configuration ──────────────────────────────────────────────────────────
 
 const GITHUB_TOKEN = process.env.GH_PAT || process.env.GITHUB_TOKEN;
-const GITHUB_ORG   = process.env.GITHUB_ORG;
+const GITHUB_ORG   = process.env.GITHUB_ORG || process.env.GH_ORG;
 const POLL_HOURS   = parseInt(process.env.POLL_HOURS || '2', 10);
 const STATE_FILE   = path.join(__dirname, '.poll-state.json');
 const MAX_STATE    = 2000;

@@ -298,7 +298,7 @@ class Parkk_Admin_Settings {
                         </tr>
                         <tr>
                             <td><strong>Variable</strong></td>
-                            <td><code>GITHUB_ORG</code></td>
+                            <td><code>GH_ORG</code></td>
                             <td>Your GitHub organization or username (e.g. <code>parkktech</code>). All non-archived, non-fork repos under this account will be polled.</td>
                         </tr>
                     </tbody>

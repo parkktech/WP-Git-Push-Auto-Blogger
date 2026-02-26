@@ -27,7 +27,7 @@ jobs:
     env:
       # ── Cross-repo access ─────────────────────────────────────────────────
       GH_PAT: ${{ secrets.GH_PAT }}
-      GITHUB_ORG: ${{ vars.GITHUB_ORG }}
+      GITHUB_ORG: ${{ vars.GH_ORG }}
       # ── Secrets ────────────────────────────────────────────────────────────
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       WP_API_URL: ${{ secrets.WP_API_URL }}
