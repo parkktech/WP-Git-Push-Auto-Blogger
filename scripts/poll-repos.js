@@ -213,59 +213,56 @@ async function main() {
                 continue;
             }
 
-            // Evaluate worthiness
-            const evaluation = await evaluateWorthiness(message, diff);
-            console.log(`  Score: ${evaluation.score}/10 — ${evaluation.reasoning}`);
+            // Process commit (wrapped in try/catch so one failure doesn't kill the run)
+            try {
+                const evaluation = await evaluateWorthiness(message, diff);
+                console.log(`  Score: ${evaluation.score}/10 — ${evaluation.reasoning}`);
 
-            if (evaluation.score < WORTHINESS_THRESHOLD) {
-                console.log(`  [SKIP] Below threshold`);
-                processedSet.add(sha);
-                state.processedSHAs.push(sha);
-                continue;
-            }
-
-            // Stock images
-            const stockImages = await searchUnsplash(evaluation.topic_summary, 3);
-            console.log(`  Stock images: ${stockImages.length}`);
-
-            // Set project context for this repo
-            process.env.PROJECT_NAME = repo.name;
-            process.env.PROJECT_URL = repo.html_url;
-            process.env.PROJECT_DESCRIPTION = repo.description || `${repo.name} by ${GITHUB_ORG}`;
-
-            // Generate blog post (no screenshots for cross-repo polling)
-            const post = await generateBlogPost(message, diff, evaluation, []);
-            console.log(`  Post: "${post.title}"`);
-
-            // Append Unsplash attribution
-            if (stockImages.length > 0) {
-                const attributions = stockImages
-                    .filter(img => img.attribution)
-                    .map(img => img.attribution)
-                    .join('');
-                if (attributions) {
-                    post.htmlContent += `\n<div class="unsplash-attribution">\n${attributions}\n</div>`;
+                if (evaluation.score < WORTHINESS_THRESHOLD) {
+                    console.log(`  [SKIP] Below threshold`);
+                    processedSet.add(sha);
+                    state.processedSHAs.push(sha);
+                    continue;
                 }
-            }
 
-            // Upload media
-            const mediaIds = [];
-            for (const img of stockImages) {
-                try {
-                    const media = await uploadMedia(img.buffer, img.filename, img.mimeType);
-                    mediaIds.push(media.id);
-                } catch (err) {
-                    console.error(`  Media upload failed: ${err.message}`);
+                const stockImages = await searchUnsplash(evaluation.topic_summary, 3);
+                console.log(`  Stock images: ${stockImages.length}`);
+
+                process.env.PROJECT_NAME = repo.name;
+                process.env.PROJECT_URL = repo.html_url;
+                process.env.PROJECT_DESCRIPTION = repo.description || `${repo.name} by ${GITHUB_ORG}`;
+
+                const post = await generateBlogPost(message, diff, evaluation, []);
+                console.log(`  Post: "${post.title}"`);
+
+                if (stockImages.length > 0) {
+                    const attributions = stockImages
+                        .filter(img => img.attribution)
+                        .map(img => img.attribution)
+                        .join('');
+                    if (attributions) {
+                        post.htmlContent += `\n<div class="unsplash-attribution">\n${attributions}\n</div>`;
+                    }
                 }
+
+                const mediaIds = [];
+                for (const img of stockImages) {
+                    try {
+                        const media = await uploadMedia(img.buffer, img.filename, img.mimeType);
+                        mediaIds.push(media.id);
+                    } catch (err) {
+                        console.error(`  Media upload failed: ${err.message}`);
+                    }
+                }
+
+                const wpPost = await createWordPressPost(post, mediaIds);
+                console.log(`  Published: ${wpPost.link} (${wpPost.status})`);
+
+                await sendTelegramNotification(wpPost.link, evaluation.score, post.title, fullName);
+                postsCreated++;
+            } catch (err) {
+                console.error(`  [ERROR] ${sha.slice(0, 7)} failed: ${err.message}`);
             }
-
-            // Create WordPress post
-            const wpPost = await createWordPressPost(post, mediaIds);
-            console.log(`  Published: ${wpPost.link} (${wpPost.status})`);
-
-            await sendTelegramNotification(wpPost.link, evaluation.score, post.title, fullName);
-
-            postsCreated++;
             processedSet.add(sha);
             state.processedSHAs.push(sha);
         }
