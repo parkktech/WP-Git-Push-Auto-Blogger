@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { Anthropic } = require('@anthropic-ai/sdk');
 const { BRAND, getUrgencyBlock, getRandomFAQs, getRandomCTA } = require('./brand-voice');
-const { searchUnsplash } = require('./media-pipeline');
+const { captureScreenshots, searchUnsplash } = require('./media-pipeline');
 const { uploadMedia, createWordPressPost } = require('./wp-client');
 const { POST_JSON_SCHEMA } = require('./evaluate-commit');
 
@@ -131,7 +131,116 @@ async function gatherProjectInfo(repo) {
         info.totalCommitsSampled = commits.length;
     } catch { info.recentCommits = []; info.totalCommitsSampled = 0; }
 
+    // Extract image URLs from README (skip badges)
+    info.readmeImages = extractReadmeImages(info.readme, fullName, info.defaultBranch);
+
+    // Check for screenshots/ directory in repo
+    try {
+        const ssContents = await githubApi(`/repos/${fullName}/contents/screenshots`);
+        info.repoScreenshots = ssContents
+            .filter(f => /\.(png|jpg|jpeg|gif|webp)$/i.test(f.name))
+            .filter(f => f.name.includes('desktop'))  // prefer desktop over mobile
+            .map(f => f.download_url);
+        if (info.repoScreenshots.length === 0) {
+            // Fallback: take any image if no desktop variants
+            info.repoScreenshots = ssContents
+                .filter(f => /\.(png|jpg|jpeg|gif|webp)$/i.test(f.name))
+                .slice(0, 5)
+                .map(f => f.download_url);
+        }
+    } catch { info.repoScreenshots = []; }
+
     return info;
+}
+
+// ─── Screenshot Helpers ────────────────────────────────────────────────────
+
+const BADGE_PATTERNS = [
+    'shields.io', 'img.shields.io', 'badge', 'travis-ci', 'circleci',
+    'coveralls', 'codecov', 'david-dm', 'snyk.io', 'npmjs.com',
+];
+
+function extractReadmeImages(readme, fullName, defaultBranch) {
+    if (!readme) return [];
+    const images = [];
+    const mdImgRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+    let match;
+    while ((match = mdImgRegex.exec(readme)) !== null) {
+        let url = match[2].trim();
+        // Skip badges
+        if (BADGE_PATTERNS.some(p => url.toLowerCase().includes(p))) continue;
+        // Convert relative paths to raw GitHub URLs
+        if (!url.startsWith('http')) {
+            url = `https://raw.githubusercontent.com/${fullName}/${defaultBranch}/${url.replace(/^\.\//, '')}`;
+        }
+        images.push(url);
+    }
+    return images;
+}
+
+function getScreenshotUrls(info) {
+    const urls = [];
+    // Priority 1: Live homepage (captured via Puppeteer)
+    if (info.homepage) urls.push(info.homepage);
+    // Priority 2: Screenshots from repo screenshots/ directory
+    for (const img of info.repoScreenshots || []) {
+        if (urls.length >= 5) break;
+        urls.push(img);
+    }
+    // Priority 3: Images from README
+    for (const img of info.readmeImages) {
+        if (urls.length >= 5) break;
+        if (urls.includes(img)) continue;
+        urls.push(img);
+    }
+    return urls.slice(0, 5);
+}
+
+/**
+ * Downloads image files directly (for repo screenshots that are static PNGs/JPGs).
+ * Uses Puppeteer only for live homepage URLs.
+ */
+async function gatherScreenshots(info) {
+    const urls = getScreenshotUrls(info);
+    if (urls.length === 0) return [];
+
+    const screenshots = [];
+    const liveUrls = [];  // URLs needing Puppeteer (live sites)
+    const directUrls = []; // URLs that are direct image files
+
+    for (const url of urls) {
+        if (/\.(png|jpg|jpeg|gif|webp)(\?|$)/i.test(url)) {
+            directUrls.push(url);
+        } else {
+            liveUrls.push(url);
+        }
+    }
+
+    // Capture live site screenshots with Puppeteer
+    if (liveUrls.length > 0) {
+        console.log(`  Puppeteer capturing: ${liveUrls.join(', ')}`);
+        const captured = await captureScreenshots(liveUrls);
+        screenshots.push(...captured);
+    }
+
+    // Download static image files directly
+    for (const url of directUrls) {
+        try {
+            const res = await fetch(url);
+            if (!res.ok) {
+                console.warn(`  Image download failed (${res.status}): ${url}`);
+                continue;
+            }
+            const buffer = Buffer.from(await res.arrayBuffer());
+            const ext = url.match(/\.(png|jpg|jpeg|gif|webp)/i)?.[1] || 'png';
+            const mediaType = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext}`;
+            screenshots.push({ buffer, url, mediaType });
+        } catch (err) {
+            console.warn(`  Image download failed: ${url} — ${err.message}`);
+        }
+    }
+
+    return screenshots;
 }
 
 function formatProjectContext(info) {
@@ -325,12 +434,30 @@ TAGS: Generate 3-8 relevant tags
 Return JSON matching the required schema.`;
 }
 
-async function generatePost(systemPrompt, userMessage) {
+async function generatePost(systemPrompt, userMessage, screenshotBuffers) {
+    // Build user content — text + optional screenshots as vision input
+    const userContent = [];
+    if (screenshotBuffers && screenshotBuffers.length > 0) {
+        for (const { buffer, mediaType } of screenshotBuffers) {
+            userContent.push({
+                type: 'image',
+                source: {
+                    type: 'base64',
+                    media_type: mediaType || 'image/png',
+                    data: buffer.toString('base64'),
+                },
+            });
+        }
+        userContent.push({ type: 'text', text: 'Above are screenshots of the live project. Reference what you see in the screenshots when writing the post.\n\n' + userMessage });
+    } else {
+        userContent.push({ type: 'text', text: userMessage });
+    }
+
     const response = await client.messages.create({
         model: 'claude-sonnet-4-6',
         max_tokens: 8192,
         system: systemPrompt,
-        messages: [{ role: 'user', content: userMessage }],
+        messages: [{ role: 'user', content: userContent }],
         output_config: {
             format: {
                 type: 'json_schema',
@@ -400,29 +527,51 @@ async function sendTelegramNotification(postUrl, postTitle, repoName, type) {
 
 // ─── Publish Helper ─────────────────────────────────────────────────────────
 
-async function publishPost(post, searchTerm) {
-    // Stock images
-    const stockImages = await searchUnsplash(searchTerm, 3);
+async function publishPost(post, screenshots, fallbackKeyword) {
+    const mediaIds = [];
 
-    // Append Unsplash attribution
-    if (stockImages.length > 0) {
-        const attributions = stockImages
-            .filter(img => img.attribution)
-            .map(img => img.attribution)
-            .join('');
-        if (attributions) {
-            post.htmlContent += `\n<div class="unsplash-attribution">\n${attributions}\n</div>`;
+    // Priority 1: Upload screenshots
+    if (screenshots && screenshots.length > 0) {
+        console.log(`  Uploading ${screenshots.length} screenshot(s)...`);
+        for (let i = 0; i < screenshots.length; i++) {
+            const ss = screenshots[i];
+            try {
+                // Extract filename from URL or generate one
+                const urlFilename = ss.url ? ss.url.split('/').pop().split('?')[0] : '';
+                const filename = urlFilename && /\.(png|jpg|jpeg|gif|webp)$/i.test(urlFilename)
+                    ? urlFilename
+                    : `screenshot-${i + 1}.png`;
+                const media = await uploadMedia(ss.buffer, filename, ss.mediaType || 'image/png');
+                mediaIds.push(media.id);
+            } catch (err) {
+                console.error(`  Screenshot upload failed: ${err.message}`);
+            }
         }
     }
 
-    // Upload media
-    const mediaIds = [];
-    for (const img of stockImages) {
-        try {
-            const media = await uploadMedia(img.buffer, img.filename, img.mimeType);
-            mediaIds.push(media.id);
-        } catch (err) {
-            console.error(`  Media upload failed: ${err.message}`);
+    // Priority 2: Fall back to Unsplash if no screenshots uploaded
+    if (mediaIds.length === 0) {
+        const keyword = fallbackKeyword + ' software';
+        console.log(`  No screenshots — searching Unsplash for "${keyword}"...`);
+        const stockImages = await searchUnsplash(keyword, 3);
+
+        if (stockImages.length > 0) {
+            const attributions = stockImages
+                .filter(img => img.attribution)
+                .map(img => img.attribution)
+                .join('');
+            if (attributions) {
+                post.htmlContent += `\n<div class="unsplash-attribution">\n${attributions}\n</div>`;
+            }
+        }
+
+        for (const img of stockImages) {
+            try {
+                const media = await uploadMedia(img.buffer, img.filename, img.mimeType);
+                mediaIds.push(media.id);
+            } catch (err) {
+                console.error(`  Media upload failed: ${err.message}`);
+            }
         }
     }
 
@@ -478,15 +627,25 @@ async function main() {
                     continue;
                 }
 
-                // Generate showcase post
+                // Gather screenshots (live site + repo images)
+                const screenshots = await gatherScreenshots(info);
+                if (screenshots.length > 0) {
+                    console.log(`  Gathered ${screenshots.length} screenshot(s)`);
+                }
+
+                // Generate showcase post (with screenshots as vision input)
                 console.log('  Generating showcase post...');
                 const projectContext = formatProjectContext(info);
                 const systemPrompt = buildShowcaseSystemPrompt(info);
-                const post = await generatePost(systemPrompt, `Write a portfolio showcase blog post about this project:\n\n${projectContext}`);
+                const post = await generatePost(
+                    systemPrompt,
+                    `Write a portfolio showcase blog post about this project:\n\n${projectContext}`,
+                    screenshots
+                );
                 console.log(`  Title: "${post.title}"`);
 
                 // Publish
-                const wpPost = await publishPost(post, evaluation.project_summary || info.name);
+                const wpPost = await publishPost(post, screenshots, info.name);
                 console.log(`  Published: ${wpPost.link} (${wpPost.status})`);
 
                 // Update state
@@ -546,18 +705,25 @@ async function main() {
                     continue;
                 }
 
-                // Generate progress post
+                // Gather screenshots (live site + repo images)
+                const screenshots = await gatherScreenshots(info);
+                if (screenshots.length > 0) {
+                    console.log(`  Gathered ${screenshots.length} screenshot(s)`);
+                }
+
+                // Generate progress post (with screenshots as vision input)
                 console.log('  Generating progress update post...');
                 const systemPrompt = buildProgressSystemPrompt(info, evaluation.milestone_summary);
                 const commitContext = newCommits.map(c => `${c.sha} ${c.message}`).join('\n');
                 const post = await generatePost(
                     systemPrompt,
-                    `Write a progress update about recent development on "${info.name}".\n\nProject: ${info.description}\nURL: ${info.url}\n\nRecent commits:\n${commitContext}`
+                    `Write a progress update about recent development on "${info.name}".\n\nProject: ${info.description}\nURL: ${info.url}\n\nRecent commits:\n${commitContext}`,
+                    screenshots
                 );
                 console.log(`  Title: "${post.title}"`);
 
                 // Publish
-                const wpPost = await publishPost(post, evaluation.milestone_summary || info.name);
+                const wpPost = await publishPost(post, screenshots, info.name);
                 console.log(`  Published: ${wpPost.link} (${wpPost.status})`);
 
                 // Update state
