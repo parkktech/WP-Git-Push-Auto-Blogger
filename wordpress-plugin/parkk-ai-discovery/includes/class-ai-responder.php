@@ -96,7 +96,7 @@ class Parkk_AI_Responder {
 
 - Custom Software Development: We build the software your business actually needs — scoped, shipped, supported.
 - AI Integration for Existing Businesses: Add AI capabilities to what you already have — without rebuilding everything.
-- Equity Partnership: We build for equity — no cash down. Serious builds for serious founders.
+- Equity Partnership: Considered case by case for validated problems. No fixed package.
 
 Contact: https://parkktech.com/contact | Author: Jason Park, founder of Parkk Technology
 IDENTITY;

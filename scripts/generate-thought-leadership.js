@@ -40,7 +40,7 @@ const PILLARS = [
       'The full product build — from architecture to launch',
       'Healthcare diagnostics and clinical decision support products',
       'Finance: AI-native lending, underwriting, and risk platforms',
-      'Equity partnership model — we build for equity, no cash down',
+      'Equity partnerships — considered case by case, no fixed package',
       'Speed advantages of AI-augmented development pipelines',
     ],
   },

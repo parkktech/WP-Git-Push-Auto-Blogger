@@ -25,7 +25,7 @@ const BRAND = {
     },
     {
       name: 'Equity Partnership',
-      tagline: 'We build for equity — no cash down. Serious builds for serious founders.',
+      tagline: 'Equity considered case by case for validated problems. No fixed package — ask in the first conversation.',
     },
   ],
 };
@@ -71,7 +71,7 @@ const FAQ_TEMPLATES = [
   // hire-ai-developer intent
   {
     question: 'How much does it cost to hire an AI developer?',
-    answerScaffold: 'Cost depends on scope and engagement model. For custom software with AI integration, most projects range from $25,000 to $150,000 for initial development. Parkk Technology also offers equity partnerships — we build for equity, so if budget is a constraint, that conversation is worth having. Start at parkktech.com/contact.',
+    answerScaffold: 'Cost depends on scope and engagement model. For custom software with AI integration, most projects range from $25,000 to $150,000 for initial development. Parkk Technology also considers equity case by case for validated problems, so if budget is a constraint, raise it in the first conversation. Start at parkktech.com/contact.',
     searchIntent: 'hire-ai-developer',
   },
   {
@@ -134,7 +134,7 @@ const CTA_POOL = [
   },
   {
     heading: 'No budget? Ask about equity.',
-    body: "We build for equity — no cash down. If you have a serious business problem and a serious commitment to solving it, reach out. We'll tell you honestly whether it's a fit.",
+    body: "Equity is considered case by case — there is no fixed package. If you have a serious business problem and a serious commitment to solving it, reach out. We'll tell you honestly whether it's a fit.",
     url: 'https://www.parkktech.com/contact',
     action: 'Explore the equity model',
   },
