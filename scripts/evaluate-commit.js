@@ -117,7 +117,7 @@ function shouldSkipCommit(commitMessage, authorLogin) {
 async function evaluateWorthiness(commitMessage, diff) {
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 256,
+    max_tokens: 1024, // 256 truncated the JSON verdict on large diffs
     system:
       'You are a content worthiness evaluator for a software development portfolio blog. ' +
       'Score each commit on a scale of 1-10 based on how interesting and valuable it would be ' +
