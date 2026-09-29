@@ -3,7 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 const { Anthropic } = require('@anthropic-ai/sdk');
-const { BRAND, getUrgencyBlock, getRandomFAQs, getRandomCTA } = require('./brand-voice');
+const { BRAND, getUrgencyBlock, getRandomFAQs, getRandomCTA, POST_KIT } = require('./brand-voice');
+const { seoBlock, generateStructured } = require('./seo-guidance');
 const { captureScreenshots, searchUnsplash } = require('./media-pipeline');
 const { uploadMedia, createWordPressPost } = require('./wp-client');
 const { POST_JSON_SCHEMA } = require('./evaluate-commit');
@@ -375,7 +376,7 @@ This post introduces the project to potential clients and demonstrates what ${BR
 
 STRUCTURE:
 1. Start with an "answer-first block" (40-60 words) optimized for AI Overviews / featured snippets
-2. Write 1500-2500 words with H2/H3 headings. NO code snippets — focus on business value.
+2. Write as long as the material supports (aim 2,000-3,500 words) with a keyword-led H2/H3 outline. NO code snippets — focus on business value.
 3. Cover: what the project does, what business problem it solves, the tech stack and why it was chosen, key features and architecture decisions, measurable outcomes
 4. Include an FAQ section with 3-5 items adapted to this project (use these as starting points):
 ${faqs.map(f => `   Q: ${f.question}\n   A scaffold: ${f.answerScaffold}`).join('\n')}
@@ -415,7 +416,7 @@ MILESTONE: ${milestoneSummary}
 
 STRUCTURE:
 1. Start with an "answer-first block" (40-60 words) optimized for AI Overviews
-2. Write 1500-2500 words with H2/H3 headings. NO code snippets — focus on what was built and why.
+2. Write as long as the material supports (aim 2,000-3,500 words) with a keyword-led H2/H3 outline. NO code snippets — focus on what was built and why.
 3. Cover: what's new, why these changes matter for users/clients, engineering decisions made, what's coming next
 4. Include an FAQ section with 3-5 items:
 ${faqs.map(f => `   Q: ${f.question}\n   A scaffold: ${f.answerScaffold}`).join('\n')}
@@ -453,10 +454,12 @@ async function generatePost(systemPrompt, userMessage, screenshotBuffers) {
         userContent.push({ type: 'text', text: userMessage });
     }
 
-    const response = await client.messages.create({
+    const topic = (systemPrompt.match(/(?:about the project|developments on) "([^"]+)"/) || [])[1] || '';
+    const seo = await seoBlock([topic, topic && topic + ' app']);
+
+    const post = await generateStructured(client, {
         model: 'claude-sonnet-4-6',
-        max_tokens: 8192,
-        system: systemPrompt,
+        system: systemPrompt + '\n\n' + POST_KIT + seo,
         messages: [{ role: 'user', content: userContent }],
         output_config: {
             format: {
@@ -466,7 +469,6 @@ async function generatePost(systemPrompt, userMessage, screenshotBuffers) {
         },
     });
 
-    const post = JSON.parse(response.content[0].text);
 
     // Inject JSON-LD into HTML if not already present
     if (post.blogPostingSchema && !post.htmlContent.includes('BlogPosting')) {

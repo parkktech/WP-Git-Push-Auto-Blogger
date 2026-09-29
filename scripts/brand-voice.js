@@ -178,4 +178,22 @@ function getRandomCTA() {
   return CTA_POOL[Math.floor(Math.random() * CTA_POOL.length)];
 }
 
-module.exports = { BRAND, getUrgencyBlock, getRandomFAQs, getRandomCTA };
+/**
+ * Post kit: the only HTML components a post may use beyond h2/h3/p/ul/ol/table.
+ * Styles live in the solutic-child theme (assets/parkk.css, "Post kit"). Keep in sync with CLAUDE.md.
+ */
+const POST_KIT = `Build htmlContent with the Parkk post kit so the post is visual, not a wall of text:
+- Every post MUST include at least: one pk-splits results band OR one pk-sheet timing chart built from REAL numbers in the source material, one pk-pit callout, and the FAQ as a pk-faqs accordion. Longer posts add pk-vs and pk-stack where real data exists.
+- NEVER invent numbers. If the source has no figures, use pk-vs to compare approaches qualitatively instead of charts.
+- Results band: <div class="pk-splits"><div><b>3.8×</b><span>faster home page</span><i>2,911 ms → 775 ms</i></div>…3–4 items…</div>
+- Before/after chart (numbers only, no units in the variables): <div class="pk-sheet" style="--max:3000"><p class="pk-sheet__title">What is measured</p><p class="pk-sheet__sub">How it was measured</p><p class="pk-sheet__key"><span>Before</span><span>After</span></p><div class="pk-sheet__row" style="--a:2911;--b:775"><span class="pk-sheet__name">Home page</span><span class="pk-sheet__bars"><i class="pk-bar pk-bar--ref"></i><i class="pk-bar pk-bar--new"></i></span><span class="pk-sheet__time"><s>2,911 ms</s><b>775 ms</b></span></div>…</div>  (--max must be ≥ the largest value; add class is-slower to a row that got worse)
+- Side by side: <div class="pk-vs"><div class="pk-vs__side"><p class="pk-vs__head">Old way</p><span class="pk-vs__tag">context</span><dl><div><dt>Metric</dt><dd>value</dd></div>…</dl></div><div class="pk-vs__side pk-vs__side--ours"><p class="pk-vs__head">Our way</p><span class="pk-vs__tag">context</span><dl>…same rows…</dl></div></div>
+- Breakdown bar: <div class="pk-stack" style="--total:217"><p class="pk-stack__title">What the parts are</p><div class="pk-stack__bar"><span style="--v:119">Label 119</span><span style="--v:71">Label 71</span></div><ul class="pk-stack__legend"><li><b>119</b> label</li>…</ul></div>
+- Key point: <div class="pk-pit"><strong>One-sentence takeaway</strong><p>Why it matters.</p></div>  Honest limitation: add class pk-pit--caution.
+- Code: <figure class="pk-code"><figcaption>Terminal: what this does</figcaption><pre><code>…</code></pre></figure>
+- Steps (only for a real sequence): <ol class="pk-steps"><li><strong>Step</strong> detail</li>…</ol>
+- FAQ: <h2>Frequently Asked Questions</h2><div class="pk-faqs"><details class="pk-faq"><summary>Question?</summary><p>Answer.</p></details>…</div>
+- CTA: <div class="pk-cta"><h2>Headline</h2><p>One or two sentences.</p><p><a class="pk-btn" href="https://www.parkktech.com/contact/">Start the conversation</a></p></div>
+- Do NOT use: eyebrow/kicker labels above headings, emoji or unicode icons, gradient text, "→" appended to links, inline style other than the --a/--b/--max/--v/--total variables.`;
+
+module.exports = { BRAND, getUrgencyBlock, getRandomFAQs, getRandomCTA, POST_KIT };

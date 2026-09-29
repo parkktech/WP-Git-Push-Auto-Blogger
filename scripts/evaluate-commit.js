@@ -1,7 +1,8 @@
 'use strict';
 
 const { Anthropic } = require('@anthropic-ai/sdk');
-const { BRAND, getUrgencyBlock, getRandomFAQs, getRandomCTA } = require('./brand-voice');
+const { BRAND, getUrgencyBlock, getRandomFAQs, getRandomCTA, POST_KIT } = require('./brand-voice');
+const { seoBlock, generateStructured } = require('./seo-guidance');
 
 // ─── Anthropic Client (module-level singleton) ──────────────────────────────
 
@@ -231,7 +232,10 @@ CATEGORIES AND TAGS:
 - Generate 3-5 tag strings relevant to the post topic
 
 OUTPUT FORMAT:
-Return a JSON object matching the provided schema exactly. The htmlContent field should contain the full post HTML (all sections, headings, paragraphs, CTA). The blogPostingSchema and faqPageSchema fields should each be complete <script type="application/ld+json"> tag strings.`;
+Return a JSON object matching the provided schema exactly. The htmlContent field should contain the full post HTML (all sections, headings, paragraphs, CTA).
+
+${POST_KIT}
+ The blogPostingSchema and faqPageSchema fields should each be complete <script type="application/ld+json"> tag strings.`;
 }
 
 // ─── Blog Post Generation ───────────────────────────────────────────────────
@@ -293,10 +297,11 @@ Today's date (ISO): ${today}`,
 
   const userContent = [...imageBlocks, textBlock];
 
-  const response = await client.messages.create({
+  const seo = await seoBlock([projectName, String(commitMessage).split('\n')[0]]);
+
+  const post = await generateStructured(client, {
     model: 'claude-sonnet-4-6',
-    max_tokens: 8192,
-    system: systemPrompt,
+    system: systemPrompt + seo,
     messages: [
       {
         role: 'user',
@@ -310,8 +315,6 @@ Today's date (ISO): ${today}`,
       },
     },
   });
-
-  const post = JSON.parse(response.content[0].text);
 
   // Post-process: inject JSON-LD schema tags into htmlContent if not already present
   if (

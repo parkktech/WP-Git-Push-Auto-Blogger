@@ -1,7 +1,8 @@
 'use strict';
 
 const { Anthropic } = require('@anthropic-ai/sdk');
-const { BRAND, getUrgencyBlock, getRandomFAQs, getRandomCTA } = require('./brand-voice');
+const { BRAND, getUrgencyBlock, getRandomFAQs, getRandomCTA, POST_KIT } = require('./brand-voice');
+const { seoBlock, generateStructured } = require('./seo-guidance');
 const { POST_JSON_SCHEMA } = require('./evaluate-commit');
 const { searchUnsplash } = require('./media-pipeline');
 const { uploadMedia, createWordPressPost } = require('./wp-client');
@@ -144,7 +145,7 @@ VOICE RULES — follow these strictly:
 ${voiceRulesText}
 
 CONTENT STRUCTURE:
-- Target 1500-2500 words
+- Length: as long as the material supports (aim 2,000-3,500 words), keyword-led H2/H3 outline
 - Write from the perspective of an expert practitioner, not a marketer
 - No code snippets — business outcomes and strategic insight only
 - Keyword-rich H2 and H3 headings optimized for search queries related to the topic
@@ -191,7 +192,10 @@ CATEGORIES AND TAGS:
 - Generate 3-5 tag strings relevant to the post topic and angle
 
 OUTPUT FORMAT:
-Return a JSON object matching the provided schema exactly. The htmlContent field should contain the full post HTML (all sections, headings, paragraphs, CTA). The blogPostingSchema and faqPageSchema fields should each be complete <script type="application/ld+json"> tag strings.`;
+Return a JSON object matching the provided schema exactly. The htmlContent field should contain the full post HTML (all sections, headings, paragraphs, CTA).
+
+${POST_KIT}
+ The blogPostingSchema and faqPageSchema fields should each be complete <script type="application/ld+json"> tag strings.`;
 }
 
 // ─── Thought Leadership Generation ───────────────────────────────────────────
@@ -217,10 +221,11 @@ async function generateThoughtLeadership(pillar, angle, weekNumber) {
 
   const today = new Date().toISOString().split('T')[0];
 
-  const response = await client.messages.create({
+  const seo = await seoBlock([pillar.name, angle]);
+
+  const post = await generateStructured(client, {
     model: 'claude-sonnet-4-6',
-    max_tokens: 8192,
-    system: systemPrompt,
+    system: systemPrompt + seo,
     messages: [
       {
         role: 'user',
@@ -242,7 +247,6 @@ This is NOT a commit-based post — do not reference any specific code changes o
     },
   });
 
-  const post = JSON.parse(response.content[0].text);
 
   // Post-process: inject JSON-LD schema tags into htmlContent if not already present
   // (same pattern as evaluate-commit.js generateBlogPost)
