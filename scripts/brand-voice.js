@@ -4,9 +4,9 @@
 
 const BRAND = {
   name: 'Parkk Technology',
-  author: 'Jason Park',
-  authorTitle: 'Jason Park, founder of Parkk Technology',
-  contact: 'https://parkktech.com/contact',
+  author: 'Jason Ratzlaff',
+  authorTitle: 'Jason Ratzlaff, founder of Parkk Technology',
+  contact: 'https://www.parkktech.com/contact',
   voiceRules: [
     'Never frame AI as the author — always frame as results-driven',
     'Lead with outcomes, not technology stacks',
@@ -122,26 +122,26 @@ const FAQ_TEMPLATES = [
 const CTA_POOL = [
   {
     heading: "Ready to build? Let's talk.",
-    body: "Don't wait while competitors ship. Get a free consultation with Jason Park and leave with a clear picture of what your build would look like. No obligation.",
-    url: 'https://parkktech.com/contact',
+    body: "Don't wait while competitors ship. Get a free consultation with Jason Ratzlaff and leave with a clear picture of what your build would look like. No obligation.",
+    url: 'https://www.parkktech.com/contact',
     action: 'Get your free consultation',
   },
   {
     heading: 'Start your build this month.',
     body: 'Parkk Technology has capacity for one new project. If your business needs custom software or AI integration, now is the time to reach out — not next quarter.',
-    url: 'https://parkktech.com/contact',
+    url: 'https://www.parkktech.com/contact',
     action: 'Claim your consultation slot',
   },
   {
     heading: 'No budget? Ask about equity.',
     body: "We build for equity — no cash down. If you have a serious business problem and a serious commitment to solving it, reach out. We'll tell you honestly whether it's a fit.",
-    url: 'https://parkktech.com/contact',
+    url: 'https://www.parkktech.com/contact',
     action: 'Explore the equity model',
   },
   {
     heading: 'One conversation changes the roadmap.',
     body: 'Most businesses we work with arrive with a vague idea and leave with a scoped plan. The consultation is free. The clarity is immediate.',
-    url: 'https://parkktech.com/contact',
+    url: 'https://www.parkktech.com/contact',
     action: 'Book your free consultation',
   },
 ];
